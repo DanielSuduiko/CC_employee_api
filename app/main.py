@@ -14,6 +14,12 @@ from fastapi import Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Security
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+
+import os
+
 security = HTTPBearer()
 API_TOKEN = "supersecrettoken"  # move to .env later if needed
 
@@ -32,6 +38,14 @@ def init_db():
 
 app = FastAPI()
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+
+
+
 def get_db():
     db = SessionLocal()
     try:
@@ -39,9 +53,9 @@ def get_db():
     finally:
         db.close()
 
-@app.get("/", dependencies=[Depends(verify_token)])
-def read_root():
-    return {"message": "Hello from FastAPI!"}
+@app.get("/", response_class=HTMLResponse)
+def serve_frontend(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/employees/", response_model=schemas.EmployeeRead, dependencies=[Depends(verify_token)])

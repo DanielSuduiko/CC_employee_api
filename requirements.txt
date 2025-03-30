@@ -5,3 +5,4 @@ pymysql
 faker
 cryptography
 tenacity
+Jinja2
