@@ -10,10 +10,8 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi import Request
-
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Security
-
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -21,7 +19,7 @@ from fastapi.responses import HTMLResponse
 import os
 
 security = HTTPBearer()
-API_TOKEN = "supersecrettoken"  # move to .env later if needed
+API_TOKEN = "zendeskwizard" 
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Security(security)):
     if credentials.credentials != API_TOKEN:
@@ -43,8 +41,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
-
-
 
 def get_db():
     db = SessionLocal()
@@ -95,7 +91,7 @@ fake = Faker()
 
 @app.on_event("startup")
 def populate_employees():
-    init_db()  # 👈 Add this
+    init_db() 
     db = SessionLocal()
     try:
         employees = crud.get_all_employees(db)

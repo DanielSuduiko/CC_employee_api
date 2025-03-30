@@ -1,22 +1,12 @@
-# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Environments
-.env
-.venv/
-env/
-venv/
-
-# Docker
 *.log
 db_data/
 
-# VSCode
 .vscode/
 
-# System
 .DS_Store
 Thumbs.db
